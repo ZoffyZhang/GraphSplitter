@@ -185,7 +185,7 @@ public class Splitter
 	}
 
 	//
-	// -------- Getters for test--------
+	// -------- Getters--------
 	//
 	public Graph getGraph()
 	{

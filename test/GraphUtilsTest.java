@@ -10,7 +10,7 @@ import dataStructure.Graph;
  * 
  * @author Zoffy Zhang
  */
-public class BasicTest
+public class GraphUtilsTest
 {
 	@Test
 	public void generateRegularGraphTest()
@@ -31,6 +31,7 @@ public class BasicTest
 	@Test
 	public void isLinearForestTest()
 	{
+		// 含有两棵线性树
 		// true linear forest
 		Graph g1 = new Graph(5);
 		g1.addEdge(0, 1);

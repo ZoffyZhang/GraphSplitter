@@ -32,7 +32,7 @@ public class Splitter
 		if (degree < 0)
 			throw new IllegalArgumentException("degree can not be negative!");
 		graph = GraphUtils.generateRegularGraph(degree + 1);
-		splitToTrees();
+		splitToTrees(0);
 		unionToLForests();
 	}
 
@@ -45,16 +45,20 @@ public class Splitter
 	public Splitter(Graph g)
 	{
 		graph = g;
-		splitToTrees();
+		splitToTrees(0);
 		unionToLForests();
 	}
 
 	/**
+	 * <b>已经证实没有splitToTrees(int s)完善</b>
+	 * <p>
 	 * 将图分解成多个线性树
 	 * <p>
 	 * graph -> trees
 	 * 
 	 */
+	@SuppressWarnings("unused")
+	@Deprecated
 	private void splitToTrees()
 	{
 		// 选择一个邻边非空的点作为搜索起点
@@ -102,6 +106,63 @@ public class Splitter
 
 			// 递归进行分解
 			splitToTrees();
+		}
+	}
+
+	/**
+	 * 另一只尝试：
+	 * 以s为起点深度优先搜索一幅图，递归下一个顶点继续搜索，将图分解成多个线性树，
+	 * 直到图为空。
+	 * <p>
+	 * graph -> trees
+	 */
+	private void splitToTrees(int s)
+	{
+		// graph为空，结束递归
+		if (GraphUtils.isEmpty(graph))
+			return;
+		// 当graph非空
+		else
+		{
+			if (graph.adj(s).size() > 0)
+			{
+				// 以s为起点开始搜索
+				DepthFirstPaths search = new DepthFirstPaths(graph, s);
+
+				// 找到最长的一条线性树，长度一样的以先找到的为结果
+				int longest = -1;	// 初始值为一个不存在的点
+				int compare = 0;	// 最长的长度初始为0
+				for (int v = 0; v < graph.V(); v++)
+				{
+					if (search.hasPathTo(v))
+					{
+						int curLength = search.pathTo(v).size();
+						if (curLength > compare)
+						{
+							compare = curLength;
+							longest = v;
+						}
+					}
+				}
+
+				// 生成最长线性树,并从原图删除该线性树
+				if (longest != -1)
+				{
+					Stack<Integer> stack = search.pathTo(longest);
+					Graph ltree = new Graph(graph.V());
+					while (stack.size() > 1)
+					{
+						int v = stack.pop();
+						int w = stack.peek();
+						ltree.addEdge(v, w);
+						graph.removeEdge(v, w);
+					}
+					trees.add(ltree);
+				}
+
+				// 递归进行分解
+				splitToTrees((s + 1) % graph.V());
+			}
 		}
 	}
 

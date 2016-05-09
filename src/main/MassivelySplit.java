@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -32,10 +33,10 @@ public class MassivelySplit
 
 		// 创造目录和文件
 		String NEWLINE = System.getProperty("line.separator");
-		SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd - kk.mm.ss");
-		String datetime = df.format(new Date());
-		String dir = System.getProperty("user.dir") + File.separator + "result" + File.separator
-				+ datetime + " - range " + min + "," + max;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd - kk.mm.ss");
+		String datetime = sdf.format(new Date());
+		String dir = System.getProperty("user.dir") + File.separator + "result"
+				+ File.separator + datetime + " - range " + min + "," + max;
 		String dir2 = dir + File.separator + "linear forest";
 		FileWriter fw_all = null;
 		FileWriter fw_true = null;
@@ -51,6 +52,8 @@ public class MassivelySplit
 		fw_true = new FileWriter(file_true);
 		fw_false = new FileWriter(file_false);
 
+		DecimalFormat df = new DecimalFormat("#.000");
+
 		// 分解从min到max度的正则图
 		String string;
 		for (int degree = min; degree <= max; degree++)
@@ -60,23 +63,24 @@ public class MassivelySplit
 			// 开始工作
 			Splitter splitter = new Splitter(degree);
 			int arboricity = splitter.getArboricity();
-			// 线性荫度猜想 Linear Arboricity Conjecture(LAC):
+			// 线性荫度猜想 Linear Arboricity
+			// Conjecture(LAC):
 			// ceil(∆/2) ≤ la(G) ≤ ceil((∆+1)/2)
 			int lExpectation = (int) Math.ceil(degree / 2.0);
 			int rExpectation = (int) Math.ceil((degree + 1) / 2.0);
 			// 验证LAC，将符合期望、不符合期望的结果分别写入文件中，file_all存有全部的结果
 			if (lExpectation <= arboricity && arboricity <= rExpectation)
 			{
-				string = "LAC TRUE: degree=" + degree + "		expected la(G)=" + rExpectation
-						+ "		computed la(G)=" + arboricity;
+				string = "LAC TRUE: degree=" + degree + "		expected la(G)="
+						+ rExpectation + "		computed la(G)=" + arboricity;
 				fw_all.write(string);
 				fw_true.write(string + NEWLINE);
 				System.out.println(string);
 			}
 			else
 			{
-				string = "LAC FALSE: degree=" + degree + "		expected la(G)=" + rExpectation
-						+ "		computed la(G)=" + arboricity;
+				string = "LAC FALSE: degree=" + degree + "		expected la(G)="
+						+ rExpectation + "		computed la(G)=" + arboricity;
 				fw_all.write(string);
 				fw_false.write(string + NEWLINE);
 				System.out.println(string);
@@ -91,7 +95,8 @@ public class MassivelySplit
 			for (Graph f : forest)
 			{
 				fw_forest.write(f.toString());
-				fw_forest.write(NEWLINE + "--------------------------" + NEWLINE + NEWLINE);
+				fw_forest.write(NEWLINE + "--------------------------"
+						+ NEWLINE + NEWLINE);
 			}
 			fw_forest.close();
 
@@ -99,7 +104,8 @@ public class MassivelySplit
 			long now = System.currentTimeMillis();
 			// 计算运行花费的时间
 			double timeSpent = (now - start) / 1000.0;
-			string = "		Time Spent: " + timeSpent + " seconds" + NEWLINE;
+			string = "		Time Spent: " + df.format(timeSpent) + " seconds"
+					+ NEWLINE;
 			// 记录花费的时间到文件中
 			fw_all.write(string);
 			System.out.println(string);

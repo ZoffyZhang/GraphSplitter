@@ -30,6 +30,17 @@ public class GraphUtils
 	}
 
 	/**
+	 * @return 图是否为空
+	 */
+	public static boolean isEmpty(Graph g)
+	{
+		for (int i = 0; i < g.V(); i++)
+			if (g.adj(i).size() > 0)
+				return false;
+		return true;
+	}
+
+	/**
 	 * @param g
 	 * @return 图g为空则返回-1，否则返回一个邻居边非空的点
 	 */

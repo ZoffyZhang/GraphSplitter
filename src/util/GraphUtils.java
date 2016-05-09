@@ -9,7 +9,7 @@ import dataStructure.Graph;
 public class GraphUtils
 {
 	/**
-	 * 产生k-1完全图，即k-正则图
+	 * k为图的度数。产生k-1完全图，即k正则图
 	 * 
 	 * @param vertexCount
 	 *            正则图的顶点数

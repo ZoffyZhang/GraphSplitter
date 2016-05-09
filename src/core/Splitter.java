@@ -6,7 +6,7 @@ import util.GraphUtils;
 import dataStructure.Graph;
 
 /**
- * 分解一个的度数为degree的正则图至线性森林
+ * 分解一个图至线性森林
  * 
  * @author Zoffy Zhang
  */
@@ -14,7 +14,7 @@ public class Splitter
 {
 	private Graph graph;
 	private LinkedList<Graph> trees = new LinkedList<Graph>();
-	private LinkedList<Graph> forest = new LinkedList<Graph>();
+	private LinkedList<Graph> forests = new LinkedList<Graph>();
 	private LinkedList<Graph> toBeUnion = new LinkedList<Graph>();
 
 	@SuppressWarnings("unused")
@@ -22,10 +22,10 @@ public class Splitter
 	{}
 
 	/**
-	 * 分解一个正则无向图
+	 * 分解一个无向完全图
 	 * 
 	 * @param degree
-	 *            正则图的度数
+	 *            完全图的度数
 	 */
 	public Splitter(int degree)
 	{
@@ -33,7 +33,7 @@ public class Splitter
 			throw new IllegalArgumentException("degree can not be negative!");
 		graph = GraphUtils.generateRegularGraph(degree + 1);
 		splitToTrees();
-		unionToLForest();
+		unionToLForests();
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class Splitter
 	{
 		graph = g;
 		splitToTrees();
-		unionToLForest();
+		unionToLForests();
 	}
 
 	/**
@@ -66,11 +66,12 @@ public class Splitter
 		// 图不为空
 		else
 		{
+			// 以s为起点开始搜索
 			DepthFirstPaths search = new DepthFirstPaths(graph, s);
 
 			// 找到最长的一条线性树，长度一样的以先找到的为结果
-			int longest = -1;
-			int compare = 1;
+			int longest = -1;	// 初始值为一个不存在的点
+			int compare = 0;	// 最长的长度初始为0
 			for (int v = 0; v < graph.V(); v++)
 			{
 				if (search.hasPathTo(v))
@@ -110,15 +111,15 @@ public class Splitter
 	 * trees -> forest
 	 * 
 	 */
-	private void unionToLForest()
+	private void unionToLForests()
 	{
 		// 将线性树按长度分为两类
-		for (int i = 0; i < trees.size(); i++)
+		for (Graph tree : trees)
 		{
-			if (trees.get(i).E() == graph.V() - 1)
-				forest.add(trees.get(i));
+			if (tree.E() == graph.V() - 1)
+				forests.add(tree);
 			else
-				toBeUnion.add(trees.get(i));
+				toBeUnion.add(tree);
 		}
 
 		union();
@@ -134,7 +135,7 @@ public class Splitter
 		if (size < 1)
 			return;
 		else if (size == 1)
-			forest.add(toBeUnion.pollFirst());
+			forests.add(toBeUnion.pollFirst());
 		else
 		{
 			// 采用两两握手的方式，尝试出最佳组合结果
@@ -143,22 +144,24 @@ public class Splitter
 				// 弹出首部的两棵线性树
 				Graph g1 = toBeUnion.pollFirst();
 				Graph g2 = toBeUnion.pollFirst();
-				// 将g1,g2合并进tmp
-				Graph tmp = new Graph(g2);
+
+				// 将g1,g2合并进tmp_g1
+				Graph tmp_g1 = new Graph(g1);
+				Graph tmp_g2 = new Graph(g2);
 				for (int v = 0; v < graph.V(); v++)
 				{
-					if (g1.adj(v).size() == 1)
+					while (tmp_g2.adj(v).size() > 0)
 					{
-						int w = g1.adj(v).getFirst();
-						// v-w边不存在，则添加进去
-						if (!tmp.connected(v, w))
-							tmp.addEdge(v, w);
+						int w = tmp_g2.adj(v).getFirst();
+						tmp_g1.addEdge(v, w);
+						tmp_g2.removeEdge(v, w);
 					}
 				}
-				// 如果tmp是一个线性森林，添加到toBeUnion首部
-				if (GraphUtils.isLinearForest(tmp))
+
+				// 如果tmp_g1是一个线性森林，添加到toBeUnion首部
+				if (GraphUtils.isLinearForest(tmp_g1))
 				{
-					toBeUnion.add(0, tmp);
+					toBeUnion.add(0, tmp_g1);
 				}
 				// 否则将g1添加到首部，g2添加到尾部
 				else
@@ -168,7 +171,7 @@ public class Splitter
 				}
 			}
 			// 此时toBeUnion的首元素完成尝试，将其添加到forest中
-			forest.add(toBeUnion.pollFirst());
+			forests.add(toBeUnion.pollFirst());
 			// 递归
 			union();
 		}
@@ -181,7 +184,7 @@ public class Splitter
 	 */
 	public int getArboricity()
 	{
-		return forest.size();
+		return forests.size();
 	}
 
 	//
@@ -197,9 +200,9 @@ public class Splitter
 		return trees;
 	}
 
-	public LinkedList<Graph> getForest()
+	public LinkedList<Graph> getForests()
 	{
-		return forest;
+		return forests;
 	}
 
 }

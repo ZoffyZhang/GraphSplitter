@@ -1438,29 +1438,29 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	/**
 	 * Test client.
 	 */
-	public static void main(String[] args)
-	{
-		StdDraw.square(.2, .8, .1);
-		StdDraw.filledSquare(.8, .8, .2);
-		StdDraw.circle(.8, .2, .2);
-
-		StdDraw.setPenColor(StdDraw.BOOK_RED);
-		StdDraw.setPenRadius(.02);
-		StdDraw.arc(.8, .2, .1, 200, 45);
-
-		// draw a blue diamond
-		StdDraw.setPenRadius();
-		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
-		double[] x = { .1, .2, .3, .2 };
-		double[] y = { .2, .3, .2, .1 };
-		StdDraw.filledPolygon(x, y);
-
-		// text
-		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.text(0.2, 0.5, "black text");
-		StdDraw.setPenColor(StdDraw.WHITE);
-		StdDraw.text(0.8, 0.8, "white text");
-	}
+//	public static void main(String[] args)
+//	{
+//		StdDraw.square(.2, .8, .1);
+//		StdDraw.filledSquare(.8, .8, .2);
+//		StdDraw.circle(.8, .2, .2);
+//
+//		StdDraw.setPenColor(StdDraw.BOOK_RED);
+//		StdDraw.setPenRadius(.02);
+//		StdDraw.arc(.8, .2, .1, 200, 45);
+//
+//		// draw a blue diamond
+//		StdDraw.setPenRadius();
+//		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
+//		double[] x = { .1, .2, .3, .2 };
+//		double[] y = { .2, .3, .2, .1 };
+//		StdDraw.filledPolygon(x, y);
+//
+//		// text
+//		StdDraw.setPenColor(StdDraw.BLACK);
+//		StdDraw.text(0.2, 0.5, "black text");
+//		StdDraw.setPenColor(StdDraw.WHITE);
+//		StdDraw.text(0.8, 0.8, "white text");
+//	}
 
 }
 

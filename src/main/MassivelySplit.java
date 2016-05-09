@@ -87,7 +87,7 @@ public class MassivelySplit
 			if (!file_forest.exists())
 				file_forest.getParentFile().mkdir();
 			fw_forest = new FileWriter(file_forest);
-			LinkedList<Graph> forest = splitter.getForest();
+			LinkedList<Graph> forest = splitter.getForests();
 			for (Graph f : forest)
 			{
 				fw_forest.write(f.toString());

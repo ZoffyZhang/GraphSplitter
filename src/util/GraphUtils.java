@@ -9,14 +9,16 @@ import dataStructure.Graph;
 public class GraphUtils
 {
 	/**
-	 * k为图的度数。产生k-1完全图，即k正则图
+	 * k为图的度数。生成k-1完全图，即k正则图
 	 * 
 	 * @param vertexCount
-	 *            正则图的顶点数
+	 *            完全图的顶点数
 	 * @return complete graph
 	 */
-	public static Graph generateRegularGraph(int vertexCount)
+	public static Graph generateCompleteGraph(int vertexCount)
 	{
+		if (vertexCount < 1)
+			throw new IllegalArgumentException("vertex could not be less than 1 !");
 		Graph g = new Graph(vertexCount);
 		for (int i = 0; i < vertexCount - 1; i++)
 		{
@@ -24,6 +26,28 @@ public class GraphUtils
 			{
 				if (!g.connected(i, j))
 					g.addEdge(i, j);
+			}
+		}
+		return g;
+	}
+
+	/**
+	 * 生成 Km,n二部图
+	 * 
+	 * @param m
+	 * @param n
+	 * @return
+	 */
+	public static Graph generateCompleteBipartiteGraph(final int m, final int n)
+	{
+		if (m < 1 || n < 1)
+			throw new IllegalArgumentException("m or n could not be less than 1 !");
+		Graph g = new Graph(m + n);
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = m; j < m + n; j++)
+			{
+				g.addEdge(i, j);
 			}
 		}
 		return g;
@@ -115,7 +139,8 @@ public class GraphUtils
 	// * @param s
 	// * @return
 	// */
-	// private static boolean isLinearTree(Graph g, int s)
+	// private static boolean isLinearTree(Graph
+	// g, int s)
 	// {
 	// // 遍历完成还没找到度数为1的点，即失败
 	// if (s >= g.V())
@@ -125,12 +150,14 @@ public class GraphUtils
 	// if (g.adj(s).size() >= 3)
 	// return false;
 	// // 点的度数为0或2，遍历下一个点
-	// else if (g.adj(s).size() == 0 || g.adj(s).size() == 2)
+	// else if (g.adj(s).size() == 0 ||
+	// g.adj(s).size() == 2)
 	// return isLinearForest(g, s + 1);
 	// // 点的度数为1
 	// else
 	// {
-	// Stack<Integer> stack = new Stack<Integer>();
+	// Stack<Integer> stack = new
+	// Stack<Integer>();
 	// stack.push(s);
 	// return isLinearTree(g, stack);
 	// }
@@ -144,7 +171,8 @@ public class GraphUtils
 	// * @param stack
 	// * @return
 	// */
-	// private static boolean isLinearTree(Graph g, Stack<Integer> stack)
+	// private static boolean isLinearTree(Graph
+	// g, Stack<Integer> stack)
 	// {
 	// // v为当前的点，w为上一个点
 	// int v = stack.peek();
@@ -159,7 +187,8 @@ public class GraphUtils
 	// return isLinearTree(g, stack);
 	// }
 	// // 尾部的情况
-	// else if (stack.size() > 1 && g.adj(v).size() == 1)
+	// else if (stack.size() > 1 &&
+	// g.adj(v).size() == 1)
 	// {
 	// return true;
 	// }

@@ -13,19 +13,29 @@ import dataStructure.Graph;
 public class GraphUtilsTest
 {
 	@Test
-	public void generateRegularGraphTest()
+	public void generateCompleteGraphTest()
 	{
-		// 测试度数从1到10的正则图是否正确
+		// 测试度数从1到10的完全图是否正确
 		for (int degree = 1; degree < 10; degree++)
 		{
-			Graph g = GraphUtils.generateRegularGraph(degree + 1);
+			Graph g = GraphUtils.generateCompleteGraph(degree + 1);
 			// 判断边数是否正确
 			assertEquals(g.E(), (degree + 1) * degree / 2);
-			// 正则图的生成情况符合期望
+			// 完全图的生成情况符合期望
 			// System.out.println(g.toString());
 			// System.out.println();
 
 		}
+	}
+
+	@Test
+	public void generateCompleteBipartiteGraphTest()
+	{
+		// 查看二部图的生成情况
+		// Graph g =
+		// GraphUtils.generateCompleteBipartiteGraph(4,
+		// 3);
+		// System.out.println(g);
 	}
 
 	@Test

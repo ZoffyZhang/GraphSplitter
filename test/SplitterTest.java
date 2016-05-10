@@ -17,10 +17,10 @@ public class SplitterTest
 	@Test
 	public void splitToTreesTest()
 	{
-		// 测试度数从1到10的完全图分解是否符合线性树的标准
-		for (int degree = 1; degree < 10; degree++)
+		// 测试顶点数从1到10的完全图分解是否符合线性树的标准
+		for (int V = 1; V < 10; V++)
 		{
-			splitter = new Splitter(degree);
+			splitter = new Splitter(V);
 			LinkedList<Graph> trees = splitter.getTrees();
 			for (int i = 0; i < trees.size(); i++)
 			{
@@ -34,8 +34,8 @@ public class SplitterTest
 	@Test
 	public void unionToForestsTest()
 	{
-		// 测试度数为4的完全图的union情况
-		splitter = new Splitter(4);
+		// 测试顶点数为4的完全图的union情况
+		splitter = new Splitter(5);
 		LinkedList<Graph> forest = splitter.getForests();
 		for (Graph f : forest)
 		{
@@ -49,10 +49,10 @@ public class SplitterTest
 	@Test
 	public void unionToForestsTest2()
 	{
-		// 测试度数为1到10的完全图的union情况
-		for (int degree = 1; degree < 10; degree++)
+		// 测试顶点数为1到10的完全图的union情况
+		for (int V = 1; V < 10; V++)
 		{
-			splitter = new Splitter(degree);
+			splitter = new Splitter(V);
 			LinkedList<Graph> forest = splitter.getForests();
 			for (int i = 0; i < forest.size(); i++)
 			{
@@ -62,15 +62,36 @@ public class SplitterTest
 	}
 
 	@Test
+	public void SplitCompleteBipartiteGraphTest()
+	{
+		// 查看完全二部图的分解及联合情况
+
+		splitter = new Splitter(1, 4);
+		LinkedList<Graph> trees = splitter.getTrees();
+		LinkedList<Graph> forest = splitter.getForests();
+
+		System.out.println("--------trees--------");
+		for (Graph g : trees)
+			System.out.println(g);
+
+		System.out.println("--------forest--------");
+		for (Graph g : forest)
+			System.out.println(g);
+
+	}
+
+	@Test
 	public void degreeTwoTest()
 	{
-		// 查看度数为2的完全图分解情况
+		// 查看度数为2的完全图分解及联合情况
 
-		splitter = new Splitter(2);
+		splitter = new Splitter(3);
 
-		// LinkedList<Graph> trees = splitter.getTrees();
-		// LinkedList<Graph> forest = splitter.getForests();
-
+		// LinkedList<Graph> trees =
+		// splitter.getTrees();
+		// LinkedList<Graph> forest =
+		// splitter.getForests();
+		//
 		// System.out.println("--------trees--------");
 		// for (Graph g : trees)
 		// System.out.println(g);
@@ -105,8 +126,9 @@ public class SplitterTest
 
 		splitter = new Splitter(g);
 		int arboricity = splitter.getArboricity();
-		// System.out.println("specialTest:" + arboricity);
-		 assertTrue(arboricity == 3);
+		// System.out.println("specialTest:" +
+		// arboricity);
+		assertTrue(arboricity == 3);
 	}
 
 	@Test
@@ -129,31 +151,35 @@ public class SplitterTest
 
 		splitter = new Splitter(g);
 		int arboricity = splitter.getArboricity();
-		// System.out.println("HamiltonTest:" + arboricity);
+		// System.out.println("HamiltonTest:" +
+		// arboricity);
 		assertTrue(arboricity == 2);
 	}
 
 	@Test
 	public void DebugTest()
 	{
-		// Debug，分析Δ=6的完全图分解过程
-		splitter = new Splitter(6);
+		// Debug，分析顶点数为7的完全图分解过程
+		splitter = new Splitter(7);
 
-		// LinkedList<Graph> trees=splitter.getTrees();
+		// LinkedList<Graph>
+		// trees=splitter.getTrees();
 		// for (Graph graph : trees)
 		// {
 		// System.out.println(graph);
 		// System.out.println("------------------------------------------");
 		// }
 
-		// LinkedList<Graph> forests = splitter.getForests();
+		// LinkedList<Graph> forests =
+		// splitter.getForests();
 		// for (Graph graph : forests)
 		// {
 		// System.out.println(graph);
 		// System.out.println("------------------------------------------");
 		//
 		// }
-		// int arboricity = splitter.getArboricity();
+		// int arboricity =
+		// splitter.getArboricity();
 		// System.out.println(arboricity);
 	}
 

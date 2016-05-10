@@ -24,16 +24,25 @@ public class Splitter
 	/**
 	 * 分解一个无向完全图
 	 * 
-	 * @param degree
-	 *            完全图的度数
+	 * @param V
+	 *            完全图的顶点数
 	 */
-	public Splitter(int degree)
+	public Splitter(int V)
 	{
-		if (degree < 0)
-			throw new IllegalArgumentException("degree can not be negative!");
-		graph = GraphUtils.generateRegularGraph(degree + 1);
-		splitToTrees(0);
-		unionToLForests();
+		graph = GraphUtils.generateCompleteGraph(V);
+		startSplitAndUnion();
+	}
+
+	/**
+	 * 分解一个无向二部图
+	 * 
+	 * @param m
+	 * @param n
+	 */
+	public Splitter(int m, int n)
+	{
+		graph = GraphUtils.generateCompleteBipartiteGraph(m, n);
+		startSplitAndUnion();
 	}
 
 	/**
@@ -45,6 +54,14 @@ public class Splitter
 	public Splitter(Graph g)
 	{
 		graph = g;
+		startSplitAndUnion();
+	}
+
+	/**
+	 * 开始工作
+	 */
+	private void startSplitAndUnion()
+	{
 		splitToTrees(0);
 		unionToLForests();
 	}
@@ -110,9 +127,7 @@ public class Splitter
 	}
 
 	/**
-	 * 另一只尝试：
-	 * 以s为起点深度优先搜索一幅图，递归下一个顶点继续搜索，将图分解成多个线性树，
-	 * 直到图为空。
+	 * 另一只尝试： 以s为起点深度优先搜索一幅图，递归下一个顶点继续搜索，将图分解成多个线性树， 直到图为空。
 	 * <p>
 	 * graph -> trees
 	 */
@@ -121,6 +136,7 @@ public class Splitter
 		// graph为空，结束递归
 		if (GraphUtils.isEmpty(graph))
 			return;
+
 		// 当graph非空
 		else
 		{
@@ -159,10 +175,9 @@ public class Splitter
 					}
 					trees.add(ltree);
 				}
-
-				// 递归进行分解
-				splitToTrees((s + 1) % graph.V());
 			}
+			// 递归进行分解
+			splitToTrees((s + 1) % graph.V());
 		}
 	}
 

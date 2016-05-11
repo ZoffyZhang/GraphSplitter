@@ -29,6 +29,14 @@ public class GraphUtilsTest
 	}
 
 	@Test
+	public void isEmptyTest()
+	{
+		//测试图为空
+		Graph graph = new Graph(5);
+		assertTrue(GraphUtils.isEmpty(graph));
+	}
+
+	@Test
 	public void generateCompleteBipartiteGraphTest()
 	{
 		// 查看二部图的生成情况
